@@ -2,6 +2,7 @@ package com.xxmicloxx.NoteBlockAPI;
 
 import com.xxmicloxx.NoteBlockAPI.songplayer.SongPlayer;
 import com.xxmicloxx.NoteBlockAPI.utils.MathUtils;
+import com.xxmicloxx.NoteBlockAPI.utils.SchedulerUtils;
 import com.xxmicloxx.NoteBlockAPI.utils.Updater;
 import org.bstats.bukkit.Metrics;
 import org.bstats.charts.DrilldownPie;
@@ -136,6 +137,9 @@ public class NoteBlockAPI extends JavaPlugin {
 	public void onEnable() {
 		plugin = this;
 		
+		// Initialize FoliaLib scheduler
+		SchedulerUtils.initialize(this);
+		
 		for (Plugin pl : getServer().getPluginManager().getPlugins()){
 			if (pl.getDescription().getDepend().contains("NoteBlockAPI") || pl.getDescription().getSoftDepend().contains("NoteBlockAPI")){
 				dependentPlugins.put(pl, false);
@@ -147,7 +151,7 @@ public class NoteBlockAPI extends JavaPlugin {
 		
 		new NoteBlockPlayerMain().onEnable();
 		
-		getServer().getScheduler().runTaskLater(this, new Runnable() {
+		SchedulerUtils.runTaskLater(new Runnable() {
 			
 			@Override
 			public void run() {
@@ -186,7 +190,7 @@ public class NoteBlockAPI extends JavaPlugin {
 			}
 		}, 1);
 		
-		getServer().getScheduler().runTaskTimerAsynchronously(this, new Runnable() {
+		SchedulerUtils.runTaskTimerAsync(new Runnable() {
 			
 			@Override
 			public void run() {
@@ -204,7 +208,7 @@ public class NoteBlockAPI extends JavaPlugin {
 	@Override
 	public void onDisable() {    	
 		disabling = true;
-		Bukkit.getScheduler().cancelTasks(this);
+		SchedulerUtils.cancelTasks();
 		List<BukkitWorker> workers = Bukkit.getScheduler().getActiveWorkers();
 		for (BukkitWorker worker : workers){
 			if (!worker.getOwner().equals(this))
@@ -215,11 +219,11 @@ public class NoteBlockAPI extends JavaPlugin {
 	}
 
 	public void doSync(Runnable runnable) {
-		getServer().getScheduler().runTask(this, runnable);
+		SchedulerUtils.runTask(runnable);
 	}
 
 	public void doAsync(Runnable runnable) {
-		getServer().getScheduler().runTaskAsynchronously(this, runnable);
+		SchedulerUtils.runTaskAsync(runnable);
 	}
 
 	public boolean isDisabling() {
