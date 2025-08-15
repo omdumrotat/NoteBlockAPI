@@ -2,6 +2,7 @@ package com.xxmicloxx.NoteBlockAPI.utils;
 
 import com.tcoded.folialib.FoliaLib;
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 import org.bukkit.plugin.Plugin;
 
@@ -30,6 +31,34 @@ public class SchedulerUtils {
         } else {
             // Fallback for if FoliaLib isn't initialized
             Bukkit.getScheduler().runTask(getPlugin(), runnable);
+        }
+    }
+    
+    /**
+     * Run a task synchronously on the entity's region thread (Folia-specific)
+     * @param entity The entity to run the task for
+     * @param runnable The task to run
+     */
+    public static void runTask(Entity entity, Runnable runnable) {
+        if (foliaLib != null) {
+            foliaLib.getImpl().runAtEntity(entity, runnable);
+        } else {
+            // Fallback for Bukkit/Paper
+            runTask(runnable);
+        }
+    }
+    
+    /**
+     * Run a task synchronously on the location's region thread (Folia-specific)
+     * @param location The location to run the task for
+     * @param runnable The task to run
+     */
+    public static void runTask(Location location, Runnable runnable) {
+        if (foliaLib != null) {
+            foliaLib.getImpl().runAtLocation(location, runnable);
+        } else {
+            // Fallback for Bukkit/Paper
+            runTask(runnable);
         }
     }
     
