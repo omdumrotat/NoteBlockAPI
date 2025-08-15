@@ -3,6 +3,7 @@ package com.xxmicloxx.NoteBlockAPI;
 import com.xxmicloxx.NoteBlockAPI.songplayer.SongPlayer;
 import com.xxmicloxx.NoteBlockAPI.utils.MathUtils;
 import com.xxmicloxx.NoteBlockAPI.utils.SchedulerUtils;
+import com.xxmicloxx.NoteBlockAPI.utils.SchedulerUtilsTest;
 import com.xxmicloxx.NoteBlockAPI.utils.Updater;
 import org.bstats.bukkit.Metrics;
 import org.bstats.charts.DrilldownPie;
@@ -139,6 +140,13 @@ public class NoteBlockAPI extends JavaPlugin {
 		
 		// Initialize FoliaLib scheduler
 		SchedulerUtils.initialize(this);
+		
+		// Test the scheduler utils to ensure Folia compatibility is working
+		if (SchedulerUtilsTest.testInitialization(this) && SchedulerUtilsTest.testAsyncTask()) {
+			getLogger().info("Folia compatibility layer initialized successfully!");
+		} else {
+			getLogger().warning("Folia compatibility layer initialization had issues, but plugin will continue...");
+		}
 		
 		for (Plugin pl : getServer().getPluginManager().getPlugins()){
 			if (pl.getDescription().getDepend().contains("NoteBlockAPI") || pl.getDescription().getSoftDepend().contains("NoteBlockAPI")){
