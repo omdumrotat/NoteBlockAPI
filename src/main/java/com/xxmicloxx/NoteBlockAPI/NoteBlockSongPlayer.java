@@ -1,6 +1,7 @@
 package com.xxmicloxx.NoteBlockAPI;
 
 import com.xxmicloxx.NoteBlockAPI.utils.InstrumentUtils;
+import com.xxmicloxx.NoteBlockAPI.utils.SchedulerUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
@@ -100,12 +101,16 @@ public class NoteBlockSongPlayer extends SongPlayer {
 			if (isPlayerInRange(player)) {
 				if (!this.playerList.get(player.getName())) {
 					playerList.put(player.getName(), true);
-					Bukkit.getPluginManager().callEvent(new PlayerRangeStateChangeEvent(this, player, true));
+					SchedulerUtils.runTask(noteBlock.getLocation(), () -> 
+						Bukkit.getPluginManager().callEvent(new PlayerRangeStateChangeEvent(this, player, true))
+					);
 				}
 			} else {
 				if (this.playerList.get(player.getName())) {
 					playerList.put(player.getName(), false);
-					Bukkit.getPluginManager().callEvent(new PlayerRangeStateChangeEvent(this, player, false));
+					SchedulerUtils.runTask(noteBlock.getLocation(), () -> 
+						Bukkit.getPluginManager().callEvent(new PlayerRangeStateChangeEvent(this, player, false))
+					);
 				}
 			}
 		}

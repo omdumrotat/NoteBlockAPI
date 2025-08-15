@@ -12,6 +12,7 @@ import com.xxmicloxx.NoteBlockAPI.model.Note;
 import com.xxmicloxx.NoteBlockAPI.model.Playlist;
 import com.xxmicloxx.NoteBlockAPI.model.Song;
 import com.xxmicloxx.NoteBlockAPI.model.SoundCategory;
+import com.xxmicloxx.NoteBlockAPI.utils.SchedulerUtils;
 
 /**
  * SongPlayer created at a specified Location
@@ -92,12 +93,16 @@ public class PositionSongPlayer extends RangeSongPlayer {
 			if (isInRange(player)) {
 				if (!playerList.get(player.getUniqueId())) {
 					playerList.put(player.getUniqueId(), true);
-					Bukkit.getPluginManager().callEvent(new PlayerRangeStateChangeEvent(this, player, true));
+					SchedulerUtils.runTask(targetLocation, () -> 
+						Bukkit.getPluginManager().callEvent(new PlayerRangeStateChangeEvent(this, player, true))
+					);
 				}
 			} else {
 				if (playerList.get(player.getUniqueId())) {
 					playerList.put(player.getUniqueId(), false);
-					Bukkit.getPluginManager().callEvent(new PlayerRangeStateChangeEvent(this, player, false));
+					SchedulerUtils.runTask(targetLocation, () -> 
+						Bukkit.getPluginManager().callEvent(new PlayerRangeStateChangeEvent(this, player, false))
+					);
 				}
 			}
 		}
