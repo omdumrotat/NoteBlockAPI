@@ -4,7 +4,7 @@ This version of NoteBlockAPI has been updated to support Folia, a high-performan
 
 ## What Changed
 
-- Added FoliaLib dependency for cross-platform compatibility
+- Added FoliaLib 0.5.1 dependency for cross-platform compatibility
 - Created `SchedulerUtils` abstraction layer for scheduling tasks
 - Updated all scheduler calls to use region-aware scheduling where appropriate
 - Updated all event firing to happen on the correct region thread

@@ -27,7 +27,7 @@ public class SchedulerUtils {
      */
     public static void runTask(Runnable runnable) {
         if (foliaLib != null) {
-            foliaLib.getImpl().runNextTick(runnable);
+            foliaLib.getScheduler().runNextTick(runnable);
         } else {
             // Fallback for if FoliaLib isn't initialized
             Bukkit.getScheduler().runTask(getPlugin(), runnable);
@@ -41,7 +41,7 @@ public class SchedulerUtils {
      */
     public static void runTask(Entity entity, Runnable runnable) {
         if (foliaLib != null) {
-            foliaLib.getImpl().runAtEntity(entity, runnable);
+            foliaLib.getScheduler().runAtEntity(entity, runnable);
         } else {
             // Fallback for Bukkit/Paper
             runTask(runnable);
@@ -55,7 +55,7 @@ public class SchedulerUtils {
      */
     public static void runTask(Location location, Runnable runnable) {
         if (foliaLib != null) {
-            foliaLib.getImpl().runAtLocation(location, runnable);
+            foliaLib.getScheduler().runAtLocation(location, runnable);
         } else {
             // Fallback for Bukkit/Paper
             runTask(runnable);
@@ -68,7 +68,7 @@ public class SchedulerUtils {
      */
     public static void runTaskAsync(Runnable runnable) {
         if (foliaLib != null) {
-            foliaLib.getImpl().runAsync(runnable);
+            foliaLib.getScheduler().runAsync(runnable);
         } else {
             // Fallback for if FoliaLib isn't initialized
             Bukkit.getScheduler().runTaskAsynchronously(getPlugin(), runnable);
@@ -82,7 +82,7 @@ public class SchedulerUtils {
      */
     public static void runTaskLater(Runnable runnable, long delay) {
         if (foliaLib != null) {
-            foliaLib.getImpl().runLater(runnable, delay);
+            foliaLib.getScheduler().runLater(runnable, delay);
         } else {
             // Fallback for if FoliaLib isn't initialized
             Bukkit.getScheduler().runTaskLater(getPlugin(), runnable, delay);
@@ -97,7 +97,7 @@ public class SchedulerUtils {
      */
     public static void runTaskTimerAsync(Runnable runnable, long delay, long period) {
         if (foliaLib != null) {
-            foliaLib.getImpl().runTimerAsync(runnable, delay, period);
+            foliaLib.getScheduler().runTimerAsync(runnable, delay, period);
         } else {
             // Fallback for if FoliaLib isn't initialized
             Bukkit.getScheduler().runTaskTimerAsynchronously(getPlugin(), runnable, delay, period);
@@ -109,7 +109,7 @@ public class SchedulerUtils {
      */
     public static void cancelTasks() {
         if (foliaLib != null) {
-            foliaLib.getImpl().cancelAllTasks();
+            foliaLib.getScheduler().cancelAllTasks();
         } else {
             // Fallback for if FoliaLib isn't initialized
             Bukkit.getScheduler().cancelTasks(getPlugin());
