@@ -28,6 +28,10 @@
 			<id>devos-repo</id>
 			<url>https://nexus.devos.one/repository/maven-public/</url>
 		</repository>
+		<repository>
+			<id>tcoded-releases</id>
+			<url>https://repo.tcoded.com/releases</url>
+		</repository>
 	</repositories>
 
 	<dependencies>
