@@ -24,6 +24,14 @@
 			<id>CodeMC</id>
 			<url>https://repo.codemc.org/repository/maven-public</url>
 		</repository>
+		<repository>
+			<id>devos-repo</id>
+			<url>https://nexus.devos.one/repository/maven-public/</url>
+		</repository>
+		<repository>
+			<id>tcoded-releases</id>
+			<url>https://repo.tcoded.com/releases</url>
+		</repository>
 	</repositories>
 
 	<dependencies>
@@ -37,6 +45,12 @@
 			<groupId>org.bstats</groupId>
 			<artifactId>bstats-bukkit</artifactId>
 			<version>3.0.0</version>
+			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.tcoded</groupId>
+			<artifactId>FoliaLib</artifactId>
+			<version>0.5.1</version>
 			<scope>compile</scope>
 		</dependency>
 	</dependencies>
@@ -65,6 +79,10 @@
 						<relocation>
 							<pattern>org.bstats</pattern>
 							<shadedPattern>com.xxmicloxx.NoteBlockAPI</shadedPattern>
+						</relocation>
+						<relocation>
+							<pattern>com.tcoded.folialib</pattern>
+							<shadedPattern>com.xxmicloxx.NoteBlockAPI.folialib</shadedPattern>
 						</relocation>
 					</relocations>
 				</configuration>

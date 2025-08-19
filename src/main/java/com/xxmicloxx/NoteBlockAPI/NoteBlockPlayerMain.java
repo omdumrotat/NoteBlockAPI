@@ -5,6 +5,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.xxmicloxx.NoteBlockAPI.utils.SchedulerUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
@@ -78,11 +79,11 @@ public class NoteBlockPlayerMain {
 	}
 
 	public void doSync(Runnable runnable) {
-		Bukkit.getServer().getScheduler().runTask(NoteBlockAPI.getAPI(), runnable);
+		SchedulerUtils.runTask(runnable);
 	}
 
 	public void doAsync(Runnable runnable) {
-		Bukkit.getServer().getScheduler().runTaskAsynchronously(NoteBlockAPI.getAPI(), runnable);
+		SchedulerUtils.runTaskAsync(runnable);
 	}
 
 	public boolean isDisabling() {
