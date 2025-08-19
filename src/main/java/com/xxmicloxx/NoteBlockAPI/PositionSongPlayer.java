@@ -5,6 +5,7 @@ import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
 import com.xxmicloxx.NoteBlockAPI.utils.InstrumentUtils;
+import com.xxmicloxx.NoteBlockAPI.utils.SchedulerUtils;
 
 /**
  * @deprecated {@link com.xxmicloxx.NoteBlockAPI.songplayer.PositionSongPlayer}
@@ -88,12 +89,16 @@ public class PositionSongPlayer extends SongPlayer {
 			if (isPlayerInRange(player)) {
 				if (!this.playerList.get(player.getName())) {
 					playerList.put(player.getName(), true);
-					Bukkit.getPluginManager().callEvent(new PlayerRangeStateChangeEvent(this, player, true));
+					SchedulerUtils.runTask(targetLocation, () -> 
+						Bukkit.getPluginManager().callEvent(new PlayerRangeStateChangeEvent(this, player, true))
+					);
 				}
 			} else {
 				if (this.playerList.get(player.getName())) {
 					playerList.put(player.getName(), false);
-					Bukkit.getPluginManager().callEvent(new PlayerRangeStateChangeEvent(this, player, false));
+					SchedulerUtils.runTask(targetLocation, () -> 
+						Bukkit.getPluginManager().callEvent(new PlayerRangeStateChangeEvent(this, player, false))
+					);
 				}
 			}
 		}
