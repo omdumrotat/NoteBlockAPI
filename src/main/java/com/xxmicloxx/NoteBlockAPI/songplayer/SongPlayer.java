@@ -600,7 +600,6 @@ public abstract class SongPlayer {
 		try {
 			SongDestroyingEvent event = new SongDestroyingEvent(this);
 			plugin.doSync(() -> Bukkit.getPluginManager().callEvent(event));
-			//Bukkit.getScheduler().cancelTask(threadId);
 			if (event.isCancelled()) {
 				return;
 			}
