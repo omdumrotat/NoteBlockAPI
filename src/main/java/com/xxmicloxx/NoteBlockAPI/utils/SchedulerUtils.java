@@ -1,7 +1,6 @@
 package com.xxmicloxx.NoteBlockAPI.utils;
 
 import com.tcoded.folialib.FoliaLib;
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 import org.bukkit.event.player.PlayerTeleportEvent;
@@ -15,6 +14,19 @@ import java.util.concurrent.CompletableFuture;
 public class SchedulerUtils {
     
     private static FoliaLib foliaLib;
+
+    private static FoliaLib getFoliaLib() {
+        if (foliaLib == null) {
+            Plugin plugin = getPlugin();
+            if (plugin != null) {
+                foliaLib = new FoliaLib(plugin);
+            }
+        }
+        if (foliaLib == null) {
+            throw new IllegalStateException("SchedulerUtils is not initialized");
+        }
+        return foliaLib;
+    }
     
     /**
      * Initialize the scheduler with FoliaLib
@@ -29,12 +41,7 @@ public class SchedulerUtils {
      * @param runnable The task to run
      */
     public static void runTask(Runnable runnable) {
-        if (foliaLib != null) {
-            foliaLib.getScheduler().runNextTick(task -> runnable.run());
-        } else {
-            // Fallback for if FoliaLib isn't initialized
-            Bukkit.getScheduler().runTask(getPlugin(), runnable);
-        }
+        getFoliaLib().getScheduler().runNextTick(task -> runnable.run());
     }
     
     /**
@@ -43,12 +50,7 @@ public class SchedulerUtils {
      * @param runnable The task to run
      */
     public static void runTask(Entity entity, Runnable runnable) {
-        if (foliaLib != null) {
-            foliaLib.getScheduler().runAtEntity(entity, task -> runnable.run());
-        } else {
-            // Fallback for Bukkit/Paper
-            runTask(runnable);
-        }
+        getFoliaLib().getScheduler().runAtEntity(entity, task -> runnable.run());
     }
     
     /**
@@ -57,12 +59,7 @@ public class SchedulerUtils {
      * @param runnable The task to run
      */
     public static void runTask(Location location, Runnable runnable) {
-        if (foliaLib != null) {
-            foliaLib.getScheduler().runAtLocation(location, task -> runnable.run());
-        } else {
-            // Fallback for Bukkit/Paper
-            runTask(runnable);
-        }
+        getFoliaLib().getScheduler().runAtLocation(location, task -> runnable.run());
     }
     
     /**
@@ -70,12 +67,7 @@ public class SchedulerUtils {
      * @param runnable The task to run
      */
     public static void runTaskAsync(Runnable runnable) {
-        if (foliaLib != null) {
-            foliaLib.getScheduler().runAsync(task -> runnable.run());
-        } else {
-            // Fallback for if FoliaLib isn't initialized
-            Bukkit.getScheduler().runTaskAsynchronously(getPlugin(), runnable);
-        }
+        getFoliaLib().getScheduler().runAsync(task -> runnable.run());
     }
     
     /**
@@ -84,12 +76,7 @@ public class SchedulerUtils {
      * @param delay Delay in ticks
      */
     public static void runTaskLater(Runnable runnable, long delay) {
-        if (foliaLib != null) {
-            foliaLib.getScheduler().runLater(task -> runnable.run(), delay);
-        } else {
-            // Fallback for if FoliaLib isn't initialized
-            Bukkit.getScheduler().runTaskLater(getPlugin(), runnable, delay);
-        }
+        getFoliaLib().getScheduler().runLater(runnable, delay);
     }
     
     /**
@@ -99,12 +86,7 @@ public class SchedulerUtils {
      * @param period Period between runs in ticks
      */
     public static void runTaskTimer(Runnable runnable, long delay, long period) {
-        if (foliaLib != null) {
-            foliaLib.getScheduler().runTimer(task -> runnable.run(), delay, period);
-        } else {
-            // Fallback for if FoliaLib isn't initialized
-            Bukkit.getScheduler().runTaskTimer(getPlugin(), runnable, delay, period);
-        }
+        getFoliaLib().getScheduler().runTimer(runnable, delay, period);
     }
     
     /**
@@ -114,24 +96,14 @@ public class SchedulerUtils {
      * @param period Period between runs in ticks
      */
     public static void runTaskTimerAsync(Runnable runnable, long delay, long period) {
-        if (foliaLib != null) {
-            foliaLib.getScheduler().runTimerAsync(task -> runnable.run(), delay, period);
-        } else {
-            // Fallback for if FoliaLib isn't initialized
-            Bukkit.getScheduler().runTaskTimerAsynchronously(getPlugin(), runnable, delay, period);
-        }
+        getFoliaLib().getScheduler().runTimerAsync(runnable, delay, period);
     }
     
     /**
      * Cancel all tasks for the plugin
      */
     public static void cancelTasks() {
-        if (foliaLib != null) {
-            foliaLib.getScheduler().cancelAllTasks();
-        } else {
-            // Fallback for if FoliaLib isn't initialized
-            Bukkit.getScheduler().cancelTasks(getPlugin());
-        }
+        getFoliaLib().getScheduler().cancelAllTasks();
     }
     
     /**
@@ -165,21 +137,7 @@ public class SchedulerUtils {
      * @return CompletableFuture indicating success/failure
      */
     public static CompletableFuture<Boolean> teleportAsync(Entity entity, Location location) {
-        if (foliaLib != null) {
-            return foliaLib.getScheduler().teleportAsync(entity, location);
-        } else {
-            // Fallback for Bukkit/Paper - run on next tick
-            CompletableFuture<Boolean> future = new CompletableFuture<>();
-            runTask(() -> {
-                try {
-                    boolean result = entity.teleport(location);
-                    future.complete(result);
-                } catch (Exception e) {
-                    future.completeExceptionally(e);
-                }
-            });
-            return future;
-        }
+        return getFoliaLib().getScheduler().teleportAsync(entity, location);
     }
     
     /**
@@ -190,21 +148,7 @@ public class SchedulerUtils {
      * @return CompletableFuture indicating success/failure
      */
     public static CompletableFuture<Boolean> teleportAsync(Entity entity, Location location, PlayerTeleportEvent.TeleportCause cause) {
-        if (foliaLib != null) {
-            return foliaLib.getScheduler().teleportAsync(entity, location, cause);
-        } else {
-            // Fallback for Bukkit/Paper - run on next tick
-            CompletableFuture<Boolean> future = new CompletableFuture<>();
-            runTask(() -> {
-                try {
-                    boolean result = entity.teleport(location, cause);
-                    future.complete(result);
-                } catch (Exception e) {
-                    future.completeExceptionally(e);
-                }
-            });
-            return future;
-        }
+        return getFoliaLib().getScheduler().teleportAsync(entity, location, cause);
     }
     
     /**
